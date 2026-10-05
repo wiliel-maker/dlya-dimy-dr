@@ -4,61 +4,53 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#1a0f1f">
+<meta name="theme-color" content="#0f0c29">
 <meta name="color-scheme" content="dark">
 <meta name="format-detection" content="telephone=no">
 <title>Диме — с днём рождения</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   :root {
-    --gold: #ffc266;
-    --gold-bright: #ffe0a3;
-    --rose: #ff7eb6;
-    --rose-soft: #ffb3d4;
-    --mint: #7fe7c4;
-    --bg1: #120a1c;
-    --bg2: #2a1233;
-    --bg3: #3a1226;
+    --coral: #ff8a65;
+    --coral-soft: #ffb59a;
+    --gold: #ffd166;
+    --gold-soft: #ffe7a8;
+    --mint: #80ffdb;
+    --ink: #0f0c29;
+    --bg1: #0f0c29;
+    --bg2: #302b63;
+    --bg3: #24243e;
+    --nav-h: 92px;
   }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
-  html, body { overflow-x: hidden; }
+  html, body { overflow: hidden; height: 100%; }
   body {
-    font-family: 'Segoe UI', 'Trebuchet MS', system-ui, sans-serif;
+    font-family: 'Rubik', 'Segoe UI', system-ui, -apple-system, sans-serif;
     color: #fff;
     background: var(--bg1);
-    min-height: 100vh;
-    min-height: 100svh;
-    min-height: 100dvh;
     position: relative;
   }
-  /* фиксированный слой градиента: работает и в iOS Safari, где background-attachment: fixed игнорируется */
   body::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background: linear-gradient(160deg, var(--bg1), var(--bg2) 45%, var(--bg3));
+    position: fixed; inset: 0; z-index: 0;
+    background: linear-gradient(155deg, var(--bg1), var(--bg2) 50%, var(--bg3));
     pointer-events: none;
   }
 
-  /* ---- шарики на фоне ---- */
+  /* ---- фоновые шарики ---- */
   #balloons { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
   .balloon {
-    position: absolute;
-    bottom: -120px;
-    width: 34px; height: 44px;
+    position: absolute; bottom: -120px;
     border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%;
-    opacity: .55;
+    opacity: .5;
     animation: floatUp linear infinite;
-    filter: blur(.2px);
   }
   .balloon::after {
-    content: '';
-    position: absolute;
-    left: 50%; top: 100%;
-    width: 1px; height: 40px;
-    background: rgba(255,255,255,.35);
-    transform: translateX(-50%);
+    content: ''; position: absolute; left: 50%; top: 100%;
+    width: 1px; height: 40px; background: rgba(255,255,255,.3); transform: translateX(-50%);
   }
   @keyframes floatUp {
     0%   { transform: translateY(0) translateX(0) rotate(-3deg); }
@@ -66,35 +58,64 @@
     100% { transform: translateY(-125vh) translateX(-10px) rotate(-3deg); }
   }
 
-  main {
-    position: relative;
-    z-index: 2;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: calc(7vh + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(12vh + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left));
+  /* ---- экраны ---- */
+  #stage {
+    position: fixed; inset: 0; z-index: 2;
+  }
+  .screen {
+    position: absolute; inset: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding:
+      calc(24px + env(safe-area-inset-top))
+      calc(22px + env(safe-area-inset-right))
+      calc(var(--nav-h) + 16px + env(safe-area-inset-bottom))
+      calc(22px + env(safe-area-inset-left));
     text-align: center;
+    opacity: 0; visibility: hidden;
+    transform: translateX(40px);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
   }
+  .screen.active {
+    opacity: 1; visibility: visible; transform: translateX(0);
+    transition: opacity .45s ease, transform .45s ease, visibility 0s;
+  }
+  .screen.leave-left { transform: translateX(-40px); }
+  .screen .inner { width: 100%; max-width: 640px; margin: auto; }
 
-  /* ---- торт ---- */
+  .kicker {
+    letter-spacing: 4px; text-transform: uppercase;
+    font-size: 13px; font-weight: 500;
+    color: var(--mint); margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(44px, 12vw, 96px);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -1px;
+    background: linear-gradient(120deg, var(--gold-soft), var(--coral-soft), var(--gold-soft));
+    background-size: 200% auto;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 5s linear infinite;
+    margin: 6px 0 10px;
+  }
+  @keyframes shimmer { to { background-position: 200% center; } }
+  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+    h1, .signature .name { color: var(--gold-soft); -webkit-text-fill-color: unset; }
+  }
+  .subtitle { font-size: clamp(17px, 4.2vw, 24px); color: var(--coral-soft); }
+
+  /* торт */
   .cake {
-    display: inline-block;
-    position: relative;
-    margin: 0 auto 6px;
-    animation: rise .8s ease forwards;
-    opacity: 0;
-    cursor: pointer;
-    -webkit-user-select: none; user-select: none;
-    touch-action: manipulation;
+    display: inline-block; position: relative; margin: 0 auto 4px;
+    cursor: pointer; -webkit-user-select: none; user-select: none; touch-action: manipulation;
+    animation: bob 4s ease-in-out infinite;
   }
-  .cake .emoji { font-size: 72px; line-height: 1; display: block; }
-  .flames {
-    position: absolute;
-    left: 50%; top: -6px;
-    transform: translateX(-50%);
-    display: flex; gap: 10px;
-  }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .cake .emoji { font-size: clamp(72px, 18vw, 110px); line-height: 1; display: block; }
+  .flames { position: absolute; left: 50%; top: -6px; transform: translateX(-50%); display: flex; gap: 11px; }
   .flame {
-    width: 10px; height: 16px;
+    width: 10px; height: 17px;
     background: radial-gradient(circle at 50% 70%, #fff6c2 0%, #ffcd4d 45%, #ff7a1a 100%);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
     box-shadow: 0 0 14px rgba(255,190,80,.9), 0 0 30px rgba(255,120,30,.5);
@@ -103,142 +124,109 @@
   }
   .flame:nth-child(2) { animation-delay: .08s; }
   .flame:nth-child(3) { animation-delay: .16s; }
-  @keyframes flicker {
-    from { transform: scaleY(1) scaleX(1); }
-    to   { transform: scaleY(1.15) scaleX(.9) translateY(-1px); }
-  }
+  @keyframes flicker { from { transform: scaleY(1); } to { transform: scaleY(1.15) scaleX(.9) translateY(-1px); } }
   .cake.blown .flame { opacity: 0; transform: translateY(-14px) scale(.2); }
-  .cake.blown .emoji { animation: bounce .5s ease; }
-  @keyframes bounce { 0%,100% { transform: scale(1); } 40% { transform: scale(1.12) rotate(-3deg); } 70% { transform: scale(.96) rotate(2deg); } }
+  .hint { font-size: 13px; color: rgba(255,255,255,.55); margin-bottom: 18px; min-height: 1.4em; }
 
-  .hint {
-    font-size: 13px;
-    color: rgba(255,255,255,.5);
-    margin: 0 0 14px;
-    opacity: 0;
-    animation: rise .8s ease forwards .1s;
-    min-height: 1.4em;
-  }
-
-  .hello {
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: var(--rose-soft);
-    margin: 10px 0 6px;
-    opacity: 0;
-    animation: rise .8s ease forwards .2s;
-  }
-
-  h1 {
-    font-size: clamp(38px, 9vw, 78px);
-    line-height: 1.05;
-    margin: 6px 0 4px;
-    background: linear-gradient(120deg, var(--gold-bright), var(--rose-soft), var(--gold-bright));
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shimmer 5s linear infinite, rise .9s ease forwards .3s;
-    opacity: 0;
-    word-break: break-word;
-  }
-  @keyframes shimmer { to { background-position: 200% center; } }
-  @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
-    h1, .signature .name { color: var(--gold-bright); -webkit-text-fill-color: unset; }
-  }
-
-  .subtitle {
-    font-size: clamp(17px, 4vw, 24px);
-    color: var(--rose-soft);
-    margin-bottom: 34px;
-    opacity: 0;
-    animation: rise .9s ease forwards .5s;
-  }
-
+  /* карточка */
   .card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,194,102,0.22);
-    border-radius: 22px;
-    padding: 28px 26px;
-    margin: 20px 0;
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-    box-shadow: 0 14px 40px rgba(0,0,0,.35);
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .8s ease, transform .8s ease;
-  }
-  .card.show { opacity: 1; transform: translateY(0); }
-  .card p { font-size: clamp(16px, 3.4vw, 20px); line-height: 1.6; }
-  .card .emoji { font-size: 28px; display: block; margin-bottom: 10px; }
-  .card .accent { color: var(--gold-bright); font-weight: 600; }
-  .card .rose { color: var(--rose); font-weight: 600; }
-  .card .mint { color: var(--mint); font-weight: 600; }
-
-  .wishes {
-    list-style: none;
-    text-align: left;
-    display: inline-block;
-    margin-top: 8px;
-  }
-  .wishes li {
-    font-size: clamp(16px, 3.4vw, 19px);
-    line-height: 1.5;
-    padding: 6px 0 6px 34px;
     position: relative;
+    background: rgba(255,255,255,.07);
+    border-radius: 28px;
+    padding: 34px 28px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.4);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
   }
-  .wishes li::before {
-    content: attr(data-emoji);
-    position: absolute; left: 0; top: 6px;
+  .card::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+    background: linear-gradient(140deg, rgba(255,209,102,.55), rgba(255,138,101,.15) 50%, rgba(128,255,219,.4));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none;
+  }
+  .card .emoji { font-size: 40px; display: block; margin-bottom: 14px; }
+  .card p { font-size: clamp(18px, 4.2vw, 23px); line-height: 1.55; font-weight: 400; }
+  .card .accent { color: var(--gold-soft); font-weight: 700; }
+  .card .coral { color: var(--coral); font-weight: 700; }
+  .card .mint { color: var(--mint); font-weight: 700; }
+  .card .num {
+    position: absolute; top: 16px; right: 20px;
+    font-size: 12px; letter-spacing: 2px; color: rgba(255,255,255,.35); font-weight: 500;
   }
 
-  .signature {
-    margin-top: 40px;
-    font-size: clamp(19px, 5vw, 27px);
-    color: var(--gold);
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .8s ease .1s, transform .8s ease .1s;
+  .wishes { list-style: none; text-align: left; display: inline-block; margin-top: 14px; }
+  .wishes li {
+    font-size: clamp(17px, 4vw, 21px); line-height: 1.45;
+    padding: 8px 0 8px 38px; position: relative;
   }
-  .signature.show { opacity: 1; transform: translateY(0); }
+  .wishes li::before { content: attr(data-emoji); position: absolute; left: 0; top: 8px; font-size: 22px; }
+
+  .signature { font-size: clamp(20px, 5vw, 30px); color: var(--gold); margin: 10px 0 26px; }
   .signature .name {
-    font-size: 1.3em;
-    background: linear-gradient(120deg, var(--rose), var(--gold-bright));
+    display: block; font-size: 1.35em; font-weight: 800; margin-top: 4px;
+    background: linear-gradient(120deg, var(--coral), var(--gold-soft));
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    font-weight: 700;
   }
 
-  .btn {
-    -webkit-appearance: none;
-    appearance: none;
-    -webkit-user-select: none;
-    user-select: none;
-    touch-action: manipulation;
-    margin-top: 30px;
-    background: linear-gradient(120deg, var(--rose), #ff5fa2);
-    color: #2a0a1a;
-    border: none;
-    padding: 16px 34px;
-    font: inherit;
-    font-size: 18px;
-    border-radius: 40px;
-    cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 10px 26px rgba(255,126,182,.35);
-    transition: transform .15s ease, box-shadow .2s ease;
-    opacity: 0;
-    animation: rise .9s ease forwards 1s;
+  /* кнопки */
+  .btn, .nav button, .link-btn {
+    -webkit-appearance: none; appearance: none;
+    -webkit-user-select: none; user-select: none; touch-action: manipulation;
+    font: inherit; font-weight: 700; cursor: pointer; border: none;
+    border-radius: 40px; transition: transform .15s ease, box-shadow .2s ease, opacity .2s ease, background .2s ease;
   }
-  .btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(255,126,182,.5); }
+  .btn {
+    background: linear-gradient(120deg, var(--coral), #ff6f61);
+    color: #2a0f0a; font-size: 18px; padding: 16px 34px;
+    box-shadow: 0 10px 26px rgba(255,138,101,.35);
+  }
+  .btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(255,138,101,.5); }
   .btn:active { transform: scale(.97); }
 
+  .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 26px; }
+  .link-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 20px; font-size: 15px; text-decoration: none;
+    color: #fff; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.18);
+  }
+  .link-btn:hover { background: rgba(255,255,255,.14); transform: translateY(-2px); }
+  .link-btn.soon { opacity: .45; cursor: default; pointer-events: none; }
+
+  /* навигация */
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 3;
+    height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+    padding: 14px calc(18px + env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+    background: linear-gradient(to top, rgba(15,12,41,.95), rgba(15,12,41,.6) 70%, rgba(15,12,41,0));
+  }
+  .nav .bar {
+    max-width: 760px; margin: 0 auto; height: 100%;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px;
+  }
+  .nav button {
+    padding: 14px 22px; font-size: 16px; white-space: nowrap;
+    color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+    min-width: 112px;
+  }
+  .nav button:hover { background: rgba(255,255,255,.16); }
+  .nav button:active { transform: scale(.97); }
+  .nav button:disabled { opacity: .25; cursor: default; }
+  .nav .prev { justify-self: start; }
+  .nav .next { justify-self: end; background: linear-gradient(120deg, var(--gold), #ffb84d); color: #2b1b00; border-color: transparent; box-shadow: 0 8px 22px rgba(255,209,102,.3); }
+  .nav button.next:hover { background: linear-gradient(120deg, var(--gold), #ffb84d); box-shadow: 0 12px 28px rgba(255,209,102,.45); }
+  .nav .next.hidden { visibility: hidden; }
+  .dots { display: flex; gap: 7px; justify-content: center; }
+  .dots i {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,.25); transition: all .3s ease;
+  }
+  .dots i.on { background: var(--gold); width: 22px; border-radius: 4px; }
+
+  /* конфетти */
   .confetti-piece {
-    position: fixed;
-    top: -40px;
-    font-size: 22px;
-    pointer-events: none;
-    z-index: 5;
+    position: fixed; top: -40px; font-size: 22px; pointer-events: none; z-index: 5;
     animation: fallDown 3s ease-in forwards;
   }
   @keyframes fallDown {
@@ -247,27 +235,21 @@
     100% { transform: translateY(105vh) rotate(400deg); opacity: 0; }
   }
 
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  footer {
-    position: relative; z-index: 2;
-    text-align: center;
-    padding: 20px;
-    font-size: 13px;
-    color: rgba(255,255,255,.35);
-  }
-
   @media (max-width: 380px) {
-    .card { padding: 22px 18px; border-radius: 18px; }
-    main { padding-left: calc(16px + env(safe-area-inset-left)); padding-right: calc(16px + env(safe-area-inset-right)); }
+    .card { padding: 26px 18px; border-radius: 22px; }
+    .nav button { min-width: 0; padding: 13px 16px; font-size: 15px; }
+    .dots { gap: 5px; }
+    .dots i.on { width: 16px; }
+  }
+  @media (max-height: 560px) {
+    :root { --nav-h: 76px; }
+    .cake .emoji { font-size: 60px; }
+    .card { padding: 22px 20px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; }
-    .card, .signature, h1, .hello, .subtitle, .btn, .cake, .hint { opacity: 1 !important; transform: none !important; }
+    * { animation: none !important; }
+    .screen { transition: none !important; }
     #balloons { display: none; }
   }
 </style>
@@ -275,69 +257,108 @@
 <body>
 <div id="balloons"></div>
 
-<main>
-  <div class="cake" id="cake" role="button" tabindex="0" aria-label="Задуть свечи">
-    <div class="flames"><span class="flame"></span><span class="flame"></span><span class="flame"></span></div>
-    <span class="emoji">🎂</span>
+<div id="stage">
+
+  <section class="screen" data-step="0">
+    <div class="inner">
+      <div class="cake" id="cake" role="button" tabindex="0" aria-label="Задуть свечи">
+        <div class="flames"><span class="flame"></span><span class="flame"></span><span class="flame"></span></div>
+        <span class="emoji">🎂</span>
+      </div>
+      <p class="hint" id="hint">нажми на торт — задуй свечи</p>
+      <p class="kicker">с днём рождения</p>
+      <h1>Диме</h1>
+      <p class="subtitle">сегодня повод есть — и он весомый</p>
+    </div>
+  </section>
+
+  <section class="screen" data-step="1">
+    <div class="inner">
+      <div class="card">
+        <span class="num">1 / 4</span>
+        <span class="emoji">🎉</span>
+        <p>В этот раз всё официально: <span class="accent">у тебя день рождения</span>,
+        и я не мог(ла) пройти мимо. Так что держи — не открытку, а целый сайт.
+        Ты стоишь большего, чем картинка в чате.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-step="2">
+    <div class="inner">
+      <div class="card">
+        <span class="num">2 / 4</span>
+        <span class="emoji">🧠</span>
+        <p>За этот год ты стал ещё более <span class="coral">ты</span>: спокойный, надёжный,
+        с тем самым чувством юмора, которое срабатывает с задержкой, но наповал.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-step="3">
+    <div class="inner">
+      <div class="card">
+        <span class="num">3 / 4</span>
+        <span class="emoji">🎁</span>
+        <p>Желаю тебе в новом году жизни:</p>
+        <ul class="wishes">
+          <li data-emoji="🔋">энергии, чтобы хватало и на дела, и на лень</li>
+          <li data-emoji="🧃">людей рядом, с которыми легко</li>
+          <li data-emoji="🎯">чтобы планы сходились хотя бы на 80%</li>
+          <li data-emoji="😴">нормального сна. Серьёзно.</li>
+          <li data-emoji="📎">и по-прежнему ни одного тиктока</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-step="4">
+    <div class="inner">
+      <div class="card">
+        <span class="num">4 / 4</span>
+        <span class="emoji">🛡️</span>
+        <p>Правило остаётся в силе: я <span class="mint">на твоей стороне</span> почти всегда,
+        а сегодня — вообще без оговорок.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" data-step="5">
+    <div class="inner">
+      <div class="signature">
+        короче —
+        <span class="name">с днём рождения, Дима 🥂</span>
+      </div>
+      <button class="btn" id="confettiBtn">Жми, тут салют</button>
+      <div class="links">
+        <a class="link-btn" href="https://wiliel-maker.github.io/dlya-dimy/">✨ Сайт без повода</a>
+        <a class="link-btn soon" href="#" aria-disabled="true">🎄 Новогодний — скоро</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<nav class="nav" aria-label="Навигация по экранам">
+  <div class="bar">
+    <button class="prev" id="prevBtn" type="button">← Назад</button>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+    <button class="next" id="nextBtn" type="button">Дальше →</button>
   </div>
-  <p class="hint" id="hint">нажми на торт — задуй свечи</p>
-
-  <p class="hello">с днём рождения</p>
-  <h1>Диме</h1>
-  <p class="subtitle">сегодня повод есть — и он весомый</p>
-
-  <div class="card">
-    <span class="emoji">🎉</span>
-    <p>В этот раз всё официально: <span class="accent">у тебя день рождения</span>,
-    и я не мог(ла) пройти мимо. Так что держи — не открытку, а целый сайт. Ты стоишь большего, чем картинка в чате.</p>
-  </div>
-
-  <div class="card">
-    <span class="emoji">🧠</span>
-    <p>За этот год ты стал ещё более <span class="rose">ты</span>: спокойный, надёжный, с тем самым чувством юмора,
-    которое срабатывает с задержкой, но наповал.</p>
-  </div>
-
-  <div class="card">
-    <span class="emoji">🎁</span>
-    <p>Желаю тебе в новом году жизни:</p>
-    <ul class="wishes">
-      <li data-emoji="🔋">энергии, чтобы хватало и на дела, и на лень</li>
-      <li data-emoji="🧃">людей рядом, с которыми легко</li>
-      <li data-emoji="🎯">чтобы планы сходились хотя бы на 80%</li>
-      <li data-emoji="😴">нормального сна. Серьёзно.</li>
-      <li data-emoji="📎">и по-прежнему ни одного тиктока</li>
-    </ul>
-  </div>
-
-  <div class="card">
-    <span class="emoji">🛡️</span>
-    <p>Правило остаётся в силе: я <span class="mint">на твоей стороне</span> почти всегда,
-    а сегодня — вообще без оговорок.</p>
-  </div>
-
-  <div class="signature">
-    короче — <span class="name">с днём рождения, Дима</span> 🥂
-  </div>
-
-  <button class="btn" id="confettiBtn">Жми, тут салют</button>
-</main>
-
-<footer>сделано с душой · специально для Димы</footer>
+</nav>
 
 <script>
   const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // шарики
   const wrap = document.getElementById('balloons');
-  const colors = ['#ff7eb6','#ffc266','#7fe7c4','#9ec5ff','#c79bff'];
-  const count = reduceMotion ? 0 : (window.innerWidth < 480 ? 7 : 12);
-  for (let i = 0; i < count; i++) {
+  const colors = ['#ff8a65','#ffd166','#80ffdb','#9ec5ff','#c79bff'];
+  const bCount = reduceMotion ? 0 : (window.innerWidth < 480 ? 7 : 12);
+  for (let i = 0; i < bCount; i++) {
     const b = document.createElement('div');
     b.className = 'balloon';
     const s = 26 + Math.random() * 22;
-    b.style.width = s + 'px';
-    b.style.height = (s * 1.28) + 'px';
+    b.style.width = s + 'px'; b.style.height = (s * 1.28) + 'px';
     b.style.left = Math.random() * 100 + 'vw';
     b.style.background = `radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), ${colors[i % colors.length]} 55%)`;
     b.style.animationDuration = (16 + Math.random() * 14) + 's';
@@ -345,21 +366,50 @@
     wrap.appendChild(b);
   }
 
-  // появление карточек при скролле
-  const cards = document.querySelectorAll('.card, .signature');
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
-    }, { threshold: 0.2 });
-    cards.forEach(c => io.observe(c));
-  } else {
-    cards.forEach(c => c.classList.add('show'));
+  // экраны и навигация
+  const screens = Array.from(document.querySelectorAll('.screen'));
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dots = document.getElementById('dots');
+  screens.forEach((_, i) => { const d = document.createElement('i'); d.addEventListener('click', () => go(i)); dots.appendChild(d); });
+  let cur = -1;
+
+  function go(n) {
+    n = Math.max(0, Math.min(screens.length - 1, n));
+    if (n === cur) return;
+    const dir = n > cur ? 1 : -1;
+    screens.forEach((s, i) => {
+      s.classList.toggle('active', i === n);
+      s.classList.toggle('leave-left', i < n);
+      if (i === n) s.scrollTop = 0;
+    });
+    cur = n;
+    prevBtn.disabled = n === 0;
+    nextBtn.classList.toggle('hidden', n === screens.length - 1);
+    Array.from(dots.children).forEach((d, i) => d.classList.toggle('on', i === n));
+    if (history.replaceState) history.replaceState(null, '', n === 0 ? location.pathname : '#' + (n + 1));
+    if (n === screens.length - 1) confetti(window.innerWidth < 480 ? 14 : 22);
   }
+  prevBtn.addEventListener('click', () => go(cur - 1));
+  nextBtn.addEventListener('click', () => go(cur + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') go(cur + 1);
+    if (e.key === 'ArrowLeft'  || e.key === 'PageUp')   go(cur - 1);
+  });
+
+  // свайпы
+  let tx = 0, ty = 0, tt = 0;
+  document.addEventListener('touchstart', (e) => { const t = e.touches[0]; tx = t.clientX; ty = t.clientY; tt = Date.now(); }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    const t = e.changedTouches[0];
+    const dx = t.clientX - tx, dy = t.clientY - ty;
+    if (Date.now() - tt < 600 && Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? cur + 1 : cur - 1);
+  }, { passive: true });
 
   // конфетти
   const bits = ['🎉','🎈','✨','🎂','🥳','🔥','⭐','🎁'];
   function confetti(n) {
-    const total = reduceMotion ? 10 : n;
+    const total = reduceMotion ? 8 : n;
     for (let i = 0; i < total; i++) {
       setTimeout(() => {
         const c = document.createElement('div');
@@ -373,21 +423,15 @@
       }, i*70);
     }
   }
-  document.getElementById('confettiBtn').addEventListener('click', () => {
-    confetti(window.innerWidth < 480 ? 18 : 26);
-  });
+  document.getElementById('confettiBtn').addEventListener('click', () => confetti(window.innerWidth < 480 ? 18 : 26));
 
-  // торт: задуть свечи
+  // торт
   const cake = document.getElementById('cake');
   const hint = document.getElementById('hint');
   const phrases = ['загадал? считается 🤞', 'свечи задуты — желание принято', 'ещё раз? можно, лимита нет'];
   let blows = 0;
   function blow() {
-    if (cake.classList.contains('blown')) {
-      cake.classList.remove('blown');
-      hint.textContent = 'свечи снова горят — задувай';
-      return;
-    }
+    if (cake.classList.contains('blown')) { cake.classList.remove('blown'); hint.textContent = 'свечи снова горят — задувай'; return; }
     cake.classList.add('blown');
     hint.textContent = phrases[Math.min(blows, phrases.length - 1)];
     blows++;
@@ -395,6 +439,10 @@
   }
   cake.addEventListener('click', blow);
   cake.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); blow(); } });
+
+  // старт (с учётом #номера в ссылке)
+  const start = parseInt((location.hash || '').replace('#', ''), 10);
+  go(isNaN(start) ? 0 : start - 1);
 </script>
 </body>
 </html>
