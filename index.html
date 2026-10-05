@@ -83,6 +83,8 @@
   }
   .screen.leave-left { transform: translateX(-40px); }
   .screen .inner { width: 100%; max-width: 640px; margin: auto; }
+  .inner.final { position: relative; }
+  .heart-wrap.gone { inset: 0; }
 
   .kicker {
     letter-spacing: 4px; text-transform: uppercase;
@@ -162,7 +164,55 @@
   }
   .wishes li::before { content: attr(data-emoji); position: absolute; left: 0; top: 8px; font-size: 22px; }
 
+  .heart-wrap { transition: opacity .3s ease; }
+  .heart-wrap.gone { opacity: 0; pointer-events: none; position: absolute; }
+  .heart-box {
+    height: clamp(200px, 40vh, 300px);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .heart {
+    -webkit-appearance: none; appearance: none; background: none; border: none; cursor: pointer;
+    -webkit-user-select: none; user-select: none; touch-action: manipulation;
+    font-size: 72px; line-height: 1; padding: 20px;
+    display: block;
+    transform: scale(var(--s, 1));
+    transition: transform .25s cubic-bezier(.34,1.56,.64,1);
+    filter: drop-shadow(0 10px 30px rgba(255,80,120,.45));
+    animation: beat 1.4s ease-in-out infinite;
+  }
+  @keyframes beat {
+    0%, 100% { transform: scale(var(--s, 1)); }
+    14% { transform: scale(calc(var(--s, 1) * 1.08)); }
+    28% { transform: scale(var(--s, 1)); }
+    42% { transform: scale(calc(var(--s, 1) * 1.06)); }
+  }
+  .heart.pop {
+    animation: pop .55s ease-out forwards;
+  }
+  @keyframes pop {
+    0%   { transform: scale(var(--s, 1)); opacity: 1; filter: drop-shadow(0 10px 30px rgba(255,80,120,.45)) blur(0); }
+    40%  { transform: scale(calc(var(--s, 1) * 1.35)); opacity: 1; }
+    100% { transform: scale(calc(var(--s, 1) * 2.2)); opacity: 0; filter: blur(6px); }
+  }
+  .burst {
+    position: fixed; left: 0; top: 0; pointer-events: none; z-index: 6;
+    font-size: 26px; line-height: 1;
+    animation: fly .9s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  @keyframes fly {
+    0%   { transform: translate(var(--x0), var(--y0)) scale(.4); opacity: 1; }
+    100% { transform: translate(var(--x1), var(--y1)) scale(1.1) rotate(var(--r)); opacity: 0; }
+  }
   .signature { font-size: clamp(20px, 5vw, 30px); color: var(--gold); margin: 10px 0 26px; }
+  #finalText { opacity: 0; transform: translateY(16px) scale(.96); transition: opacity .6s ease .15s, transform .6s ease .15s; pointer-events: none; }
+  #finalText.show { opacity: 1; transform: none; pointer-events: auto; }
+  .again {
+    -webkit-appearance: none; appearance: none; cursor: pointer; margin-top: 22px;
+    font: inherit; font-size: 14px; font-weight: 500;
+    color: rgba(255,255,255,.6); background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.16); border-radius: 30px; padding: 10px 18px;
+  }
+  .again:hover { color: #fff; background: rgba(255,255,255,.14); }
   .signature .name {
     display: block; font-size: 1.35em; font-weight: 800; margin-top: 4px;
     background: linear-gradient(120deg, var(--coral), var(--gold-soft));
@@ -236,6 +286,8 @@
     :root { --nav-h: 76px; }
     .cake .emoji { font-size: 60px; }
     .card { padding: 22px 20px; }
+    .heart { font-size: 48px; padding: 12px; }
+    .heart-box { height: 170px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -267,10 +319,9 @@
     <div class="inner">
       <div class="card">
         <span class="num">1 / 4</span>
-        <span class="emoji">🎉</span>
-        <p>В этот раз всё официально: <span class="accent">у тебя день рождения</span>,
-        и я не мог пройти мимо. Так что держи — не открытку, а целый сайт.
-        Ты стоишь большего, чем картинка в чате.</p>
+        <span class="emoji">😅</span>
+        <p>Димуся, надеюсь, тебе ещё не надоели эти сайты.
+        Потому что <span class="accent">это не последний</span>.</p>
       </div>
     </div>
   </section>
@@ -280,7 +331,7 @@
       <div class="card">
         <span class="num">2 / 4</span>
         <span class="emoji">🧠</span>
-        <p>Надеюсь, в этом году твой <span class="coral">гениальнейший мозг</span> наконец перестанет
+        <p>Надеюсь, в 16 твой <span class="coral">гениальнейший мозг</span> наконец перестанет
         шутить про сикс севен. Хотя кого я обманываю.</p>
       </div>
     </div>
@@ -307,19 +358,24 @@
     <div class="inner">
       <div class="card">
         <span class="num">4 / 4</span>
-        <span class="emoji">🛡️</span>
-        <p>Правило остаётся в силе: я <span class="mint">на твоей стороне</span> почти всегда,
-        а сегодня — вообще без оговорок.</p>
+        <span class="emoji">💬</span>
+        <p>Пиши мне в любое время. <span class="mint">Даже про сикс севен</span> ❤️</p>
       </div>
     </div>
   </section>
 
   <section class="screen" data-step="5">
-    <div class="inner">
-      <div class="signature">
-        <span class="name">с днём рождения, Дима 🥂</span>
+    <div class="inner final">
+      <div class="heart-wrap" id="heartWrap">
+        <div class="heart-box">
+          <button class="heart" id="heart" type="button" aria-label="Нажми на сердце">❤️</button>
+        </div>
+        <p class="hint" id="heartHint">нажимай на сердце</p>
       </div>
-      <button class="btn" id="confettiBtn">Нажми, не пожалеешь</button>
+      <div class="signature" id="finalText">
+        <span class="name">с днём рождения, Дима 🥂</span>
+        <button class="again" id="againBtn" type="button">ещё раз</button>
+      </div>
     </div>
   </section>
 
@@ -374,7 +430,6 @@
     nextBtn.classList.toggle('hidden', n === screens.length - 1);
     Array.from(dots.children).forEach((d, i) => d.classList.toggle('on', i === n));
     if (history.replaceState) history.replaceState(null, '', n === 0 ? location.pathname : '#' + (n + 1));
-    if (n === screens.length - 1) confetti(window.innerWidth < 480 ? 14 : 22);
   }
   prevBtn.addEventListener('click', () => go(cur - 1));
   nextBtn.addEventListener('click', () => go(cur + 1));
@@ -393,7 +448,7 @@
   }, { passive: true });
 
   // конфетти
-  const bits = ['🎉','🎈','✨','🎂','🥳','🔥','⭐','🎁'];
+  const bits = ['🎉','🎈','✨','🎂','🥳','❤️','⭐','🎁','💖'];
   function confetti(n) {
     const total = reduceMotion ? 8 : n;
     for (let i = 0; i < total; i++) {
@@ -409,7 +464,59 @@
       }, i*70);
     }
   }
-  document.getElementById('confettiBtn').addEventListener('click', () => confetti(window.innerWidth < 480 ? 18 : 26));
+  // сердце: растёт с каждым нажатием и лопается
+  const heart = document.getElementById('heart');
+  const heartWrap = document.getElementById('heartWrap');
+  const heartHint = document.getElementById('heartHint');
+  const finalText = document.getElementById('finalText');
+  const TAPS = 6;
+  let taps = 0, popped = false;
+  const heartHints = ['ещё', 'ещё немного', 'растёт', 'почти', 'сейчас лопнет…'];
+
+  function burstHearts() {
+    const r = heart.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const n = reduceMotion ? 8 : (window.innerWidth < 480 ? 22 : 32);
+    const kinds = ['❤️','💖','🧡','💛','💗','✨'];
+    for (let i = 0; i < n; i++) {
+      const e = document.createElement('div');
+      e.className = 'burst';
+      e.textContent = kinds[Math.floor(Math.random() * kinds.length)];
+      const a = (Math.PI * 2) * (i / n) + Math.random() * .4;
+      const d = 120 + Math.random() * (window.innerWidth < 480 ? 140 : 240);
+      e.style.setProperty('--x0', cx + 'px'); e.style.setProperty('--y0', cy + 'px');
+      e.style.setProperty('--x1', (cx + Math.cos(a) * d) + 'px'); e.style.setProperty('--y1', (cy + Math.sin(a) * d) + 'px');
+      e.style.setProperty('--r', (Math.random() * 240 - 120) + 'deg');
+      e.style.fontSize = (18 + Math.random() * 18) + 'px';
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 1000);
+    }
+  }
+  function tapHeart() {
+    if (popped) return;
+    taps++;
+    if (taps >= TAPS) {
+      popped = true;
+      heart.classList.add('pop');
+      heartHint.textContent = '';
+      burstHearts();
+      setTimeout(() => confetti(window.innerWidth < 480 ? 16 : 24), 150);
+      setTimeout(() => { heartWrap.classList.add('gone'); finalText.classList.add('show'); }, 450);
+      return;
+    }
+    heart.style.setProperty('--s', (1 + taps * 0.24).toFixed(2));
+    heartHint.textContent = heartHints[Math.min(taps - 1, heartHints.length - 1)];
+  }
+  function resetHeart() {
+    taps = 0; popped = false;
+    finalText.classList.remove('show');
+    heart.classList.remove('pop');
+    heart.style.setProperty('--s', '1');
+    heartHint.textContent = 'нажимай на сердце';
+    heartWrap.classList.remove('gone');
+  }
+  heart.addEventListener('click', tapHeart);
+  document.getElementById('againBtn').addEventListener('click', resetHeart);
 
   // торт
   const cake = document.getElementById('cake');
@@ -426,9 +533,13 @@
   cake.addEventListener('click', blow);
   cake.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); blow(); } });
 
-  // старт (с учётом #номера в ссылке)
-  const start = parseInt((location.hash || '').replace('#', ''), 10);
-  go(isNaN(start) ? 0 : start - 1);
+  // старт и переходы по #номеру в ссылке (в т.ч. кнопка «назад» в браузере)
+  function fromHash() {
+    const n = parseInt((location.hash || '').replace('#', ''), 10);
+    go(isNaN(n) ? 0 : n - 1);
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
 </script>
 </body>
 </html>
