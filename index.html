@@ -170,7 +170,7 @@
   }
 
   /* кнопки */
-  .btn, .nav button, .link-btn {
+  .btn, .nav button {
     -webkit-appearance: none; appearance: none;
     -webkit-user-select: none; user-select: none; touch-action: manipulation;
     font: inherit; font-weight: 700; cursor: pointer; border: none;
@@ -184,15 +184,6 @@
   .btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 14px 32px rgba(255,138,101,.5); }
   .btn:active { transform: scale(.97); }
 
-  .links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 26px; }
-  .link-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 20px; font-size: 15px; text-decoration: none;
-    color: #fff; background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.18);
-  }
-  .link-btn:hover { background: rgba(255,255,255,.14); transform: translateY(-2px); }
-  .link-btn.soon { opacity: .45; cursor: default; pointer-events: none; }
 
   /* навигация */
   .nav {
@@ -278,7 +269,7 @@
         <span class="num">1 / 4</span>
         <span class="emoji">🎉</span>
         <p>В этот раз всё официально: <span class="accent">у тебя день рождения</span>,
-        и я не мог(ла) пройти мимо. Так что держи — не открытку, а целый сайт.
+        и я не мог пройти мимо. Так что держи — не открытку, а целый сайт.
         Ты стоишь большего, чем картинка в чате.</p>
       </div>
     </div>
@@ -289,8 +280,8 @@
       <div class="card">
         <span class="num">2 / 4</span>
         <span class="emoji">🧠</span>
-        <p>За этот год ты стал ещё более <span class="coral">ты</span>: спокойный, надёжный,
-        с тем самым чувством юмора, которое срабатывает с задержкой, но наповал.</p>
+        <p>Надеюсь, в этом году твой <span class="coral">гениальнейший мозг</span> наконец перестанет
+        шутить про сикс севен. Хотя кого я обманываю.</p>
       </div>
     </div>
   </section>
@@ -326,14 +317,9 @@
   <section class="screen" data-step="5">
     <div class="inner">
       <div class="signature">
-        короче —
         <span class="name">с днём рождения, Дима 🥂</span>
       </div>
-      <button class="btn" id="confettiBtn">Жми, тут салют</button>
-      <div class="links">
-        <a class="link-btn" href="https://wiliel-maker.github.io/dlya-dimy/">✨ Сайт без повода</a>
-        <a class="link-btn soon" href="#" aria-disabled="true">🎄 Новогодний — скоро</a>
-      </div>
+      <button class="btn" id="confettiBtn">Нажми, не пожалеешь</button>
     </div>
   </section>
 
